@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Every Project Has a Recipe — The 10 C's Framework</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy:  #0D1B2A;
+  --gold:  #C9A84C;
+  --gold2: #F0D98A;
+  --cream: #FDF6EC;
+  --white: #ffffff;
+  --slate: #3D5165;
+  --light: #F5F0E8;
+  --border:#D8CEBC;
+  --muted: #8A8070;
+  --r: 12px;
+  --sh: 0 4px 24px rgba(13,27,42,0.10);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);min-height:100vh;}
+
+header{background:var(--navy);padding:28px 24px 0;text-align:center;}
+header .tea{font-size:26px;margin-bottom:6px;}
+header h1{font-family:'Playfair Display',serif;font-size:clamp(18px,4vw,30px);color:var(--gold);line-height:1.25;margin-bottom:6px;}
+header p{color:#A8B8C8;font-size:13px;font-weight:300;padding-bottom:20px;}
+.gold-bar{height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+
+.screen{display:none;max-width:780px;margin:0 auto;padding:28px 18px 60px;}
+.screen.active{display:block;}
+
+/* WELCOME */
+.quote-box{background:var(--navy);border-radius:var(--r);padding:24px;margin-bottom:22px;border:1px solid rgba(201,168,76,.25);}
+.quote-box blockquote{font-family:'Playfair Display',serif;font-style:italic;font-size:19px;color:var(--gold2);line-height:1.5;margin-bottom:8px;}
+.quote-box cite{font-size:12px;color:#7A9AB5;}
+.welcome-body{text-align:center;}
+.welcome-body h2{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:10px;}
+.welcome-body p{color:var(--slate);font-size:14px;line-height:1.7;max-width:500px;margin:0 auto 22px;}
+
+/* IDEAL OUTCOME */
+.outcome-card{background:var(--navy);border-radius:var(--r);padding:24px;margin-bottom:20px;box-shadow:var(--sh);}
+.outcome-card label{display:block;color:var(--gold);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;}
+.outcome-card input{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(201,168,76,.35);border-radius:8px;padding:13px 15px;font-family:'Playfair Display',serif;font-size:18px;color:var(--white);outline:none;transition:border-color .2s;}
+.outcome-card input::placeholder{color:rgba(255,255,255,.25);font-size:14px;font-family:'DM Sans',sans-serif;font-style:italic;}
+.outcome-card input:focus{border-color:var(--gold);}
+.outcome-card .hint{margin-top:8px;font-size:12px;color:#7A9AB5;font-style:italic;}
+.do-dont{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+@media(max-width:460px){.do-dont{grid-template-columns:1fr;}}
+.do-box{padding:14px;border-radius:10px;background:#F0FAF4;border-left:3px solid #2D6A4F;}
+.dont-box{padding:14px;border-radius:10px;background:#FEF2F2;border-left:3px solid #9B2335;}
+.do-box h4{font-size:12px;font-weight:700;color:#2D6A4F;margin-bottom:6px;}
+.dont-box h4{font-size:12px;font-weight:700;color:#9B2335;margin-bottom:6px;}
+.do-box li,.dont-box li{font-size:12px;color:var(--slate);list-style:none;line-height:1.9;}
+
+/* TABS */
+.tab-shell{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;}
+.tab-nav{display:flex;overflow-x:auto;background:var(--navy);scrollbar-width:none;-webkit-overflow-scrolling:touch;border-bottom:2px solid rgba(201,168,76,.2);}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-btn{flex:0 0 auto;padding:11px 13px;font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:600;color:#7A9AB5;background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap;letter-spacing:.03em;}
+.tab-btn:hover{color:var(--gold2);}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+.tab-btn .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--gold);margin-left:4px;vertical-align:middle;}
+
+.tab-pane{display:none;padding:22px;}
+.tab-pane.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+.c-header{display:flex;align-items:center;gap:12px;margin-bottom:13px;}
+.c-num-badge{width:40px;height:40px;border-radius:50%;background:var(--navy);color:var(--gold);font-family:'Playfair Display',serif;font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.c-title{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:var(--navy);}
+.c-sub{font-size:11px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-top:1px;}
+.def-box{background:var(--light);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:12px 14px;font-size:13px;color:var(--slate);line-height:1.65;margin-bottom:14px;}
+.def-box strong{color:var(--navy);}
+.ans-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px;}
+.tab-pane textarea{width:100%;border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--navy);resize:vertical;min-height:76px;outline:none;background:var(--cream);transition:border-color .2s;line-height:1.6;}
+.tab-pane textarea::placeholder{color:#B8AEAA;}
+.tab-pane textarea:focus{border-color:var(--gold);background:#FFFDF8;}
+
+.score-row{display:flex;align-items:center;gap:12px;margin-top:14px;}
+.score-lbl{font-size:11px;color:var(--muted);width:56px;flex-shrink:0;}
+.score-lbl.right{text-align:right;}
+.slider-wrap{flex:1;}
+input[type=range]{width:100%;-webkit-appearance:none;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--gold) var(--pct,50%),#E0D8CC var(--pct,50%));outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--navy);border:2px solid var(--gold);cursor:pointer;transition:transform .15s;}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15);}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--navy);border:2px solid var(--gold);}
+.score-val{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--gold);min-width:34px;text-align:center;}
+
+.tab-footer{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-top:1px solid var(--border);}
+
+/* BUTTONS */
+.btn{padding:11px 22px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .2s;}
+.btn-primary{background:var(--navy);color:var(--gold);}
+.btn-primary:hover{background:var(--slate);transform:translateY(-1px);}
+.btn-gold{background:var(--gold);color:var(--navy);}
+.btn-gold:hover{background:var(--gold2);transform:translateY(-1px);}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);}
+.btn-ghost:hover{border-color:var(--navy);color:var(--navy);}
+.btn-wa{background:#25D366;color:#fff;}
+.btn-wa:hover{background:#1DA851;}
+.btn-sm{padding:8px 16px;font-size:13px;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+
+.nav-row{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:16px;}
+
+/* SUMMARY */
+.sum-hero{text-align:center;margin-bottom:24px;}
+.sum-hero .icon{font-size:36px;margin-bottom:8px;}
+.sum-hero h2{font-family:'Playfair Display',serif;font-size:26px;margin-bottom:6px;}
+.sum-hero p{font-size:14px;color:var(--muted);}
+.sum-outcome{background:var(--navy);border-radius:var(--r);padding:18px 22px;margin-bottom:20px;}
+.sum-outcome .lbl{font-size:11px;font-weight:600;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;margin-bottom:5px;}
+.sum-outcome .val{font-family:'Playfair Display',serif;font-size:20px;color:var(--white);}
+.avg-row{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:18px;}
+.avg-badge{text-align:center;min-width:90px;}
+.avg-num{font-family:'Playfair Display',serif;font-size:52px;font-weight:700;color:var(--gold);line-height:1;}
+.avg-label{font-size:11px;color:var(--muted);margin-top:3px;}
+.score-tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;flex:1;min-width:220px;}
+@media(max-width:500px){.score-tiles{grid-template-columns:repeat(3,1fr);}}
+.s-tile{background:var(--white);border-radius:9px;padding:9px 7px;text-align:center;box-shadow:0 2px 8px rgba(13,27,42,.06);}
+.s-tile .tn{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:3px;}
+.s-tile .ts{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--navy);}
+.s-tile .tb{height:3px;border-radius:99px;background:#EAE8E4;margin-top:4px;overflow:hidden;}
+.s-tile .tf{height:100%;background:var(--gold);border-radius:99px;}
+.sum-cards{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:26px;}
+@media(max-width:500px){.sum-cards{grid-template-columns:1fr;}}
+.s-card{background:var(--white);border-radius:10px;padding:15px;border-left:3px solid var(--gold);box-shadow:0 2px 8px rgba(13,27,42,.06);}
+.s-card .sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.s-card .sn{font-weight:700;font-size:13px;color:var(--navy);}
+.s-card .sb{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--gold);background:var(--navy);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.s-card .sa{font-size:13px;color:var(--slate);line-height:1.5;}
+.s-card .se{font-size:13px;color:#C0B8B0;font-style:italic;}
+.action-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.footer-note{text-align:center;font-size:12px;color:var(--muted);margin-top:20px;}
+.footer-note a{color:var(--gold);text-decoration:none;}
+
+@media print{
+  header,.tab-nav,.tab-footer,.nav-row,.action-row,
+  #screenWelcome,#screenIdeal,#screenTabs,
+  .sum-hero,.avg-row,.footer-note{display:none!important;}
+  body{background:white;margin:0;padding:0;}
+  .screen{padding:0!important;max-width:100%!important;}
+  #screenSummary{display:block!important;}
+  #printHeader{display:block!important;}
+  #printFooter{display:block!important;}
+  #scoreSummaryBar{display:flex!important;}
+  .sum-outcome{background:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sum-cards{grid-template-columns:1fr 1fr!important;gap:8px!important;margin-bottom:12px!important;}
+  .sum-cards .s-card{break-inside:avoid;border:1px solid #ccc!important;box-shadow:none!important;}
+}
+#printHeader,#printFooter,#scoreSummaryBar{display:none;}
+#printHeader{text-align:center;padding:16px 0 10px;border-bottom:2px solid #000;margin-bottom:14px;}
+#printHeader h2{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#000;margin-bottom:3px;}
+#printHeader .ph-sub{font-size:11px;color:#555;margin-bottom:6px;}
+#printHeader .ph-outcome{font-family:'Playfair Display',serif;font-size:15px;color:#000;background:#f5f0e8;padding:7px 14px;border-radius:6px;border-left:3px solid #C9A84C;display:inline-block;margin-top:5px;}
+#printHeader .ph-quote{font-style:italic;font-size:11px;color:#777;margin-top:7px;}
+#scoreSummaryBar{gap:5px;flex-wrap:wrap;margin-bottom:12px;}
+.pscore-tile{flex:1;min-width:68px;text-align:center;border:1px solid #ddd;border-radius:6px;padding:6px 4px;}
+.pscore-tile .ptn{font-size:8px;font-weight:700;text-transform:uppercase;color:#888;margin-bottom:2px;}
+.pscore-tile .pts{font-size:17px;font-weight:700;color:#000;font-family:'Playfair Display',serif;}
+#printFooter{text-align:center;font-size:11px;color:#888;border-top:1px solid #ddd;margin-top:14px;padding-top:7px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="tea">🍵</div>
+  <h1>Every Project Has a Recipe. Do You Know Yours?</h1>
+  <p>The 10 C's Framework &nbsp;·&nbsp; Chinmay Ananda</p>
+</header>
+<div class="gold-bar"></div>
+
+<!-- WELCOME -->
+<div class="screen active" id="screenWelcome">
+  <div class="quote-box">
+    <blockquote>"I cannot make tea. I only know how to make tea."</blockquote>
+    <cite>— Nishkala Chinmay, age 4 yrs &nbsp;·&nbsp; The insight that started this framework</cite>
+  </div>
+  <div class="welcome-body">
+    <h2>Every project has a recipe.</h2>
+    <p>Walk through the <strong>10 C's Framework</strong> — a simple, jargon-free lens to examine any project or goal. Fill in each C, rate your confidence, and end with a printable one-page summary you can share.</p>
+    <button class="btn btn-gold" style="font-size:15px;padding:14px 40px;margin-bottom:10px" onclick="show('screenIdeal')">Let's brew this →</button>
+    <br/><span style="font-size:11px;color:var(--muted)">No sign-up. No data stored. Works offline.</span>
+  </div>
+</div>
+
+<!-- IDEAL OUTCOME -->
+<div class="screen" id="screenIdeal">
+  <div class="outcome-card">
+    <label>★ &nbsp;Set Your Ideal Outcome First</label>
+    <input type="text" id="idealInput" placeholder="What does success look like for this project?"/>
+    <div class="hint">Be specific. Make it yours. A goal without a clear picture is just a wish.</div>
+  </div>
+  <div class="do-dont">
+    <div class="do-box">
+      <h4>✔ THE DO's</h4>
+      <ul>
+        <li>Make it specific</li>
+        <li>Make it inspiring</li>
+        <li>Make it yours, not others'</li>
+        <li>Attach a deadline</li>
+      </ul>
+    </div>
+    <div class="dont-box">
+      <h4>✘ THE DON'Ts</h4>
+      <ul>
+        <li>Busy ≠ productive</li>
+        <li>Don't use others' language</li>
+        <li>Don't keep it vague</li>
+        <li>Don't ignore what you're saying NO to</li>
+      </ul>
+    </div>
+  </div>
+  <div class="nav-row">
+    <button class="btn btn-ghost" onclick="show('screenWelcome')">← Back</button>
+    <button class="btn btn-primary" onclick="startTabs()">Start the 10 C's →</button>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="screen" id="screenTabs">
+  <div id="outcomeBar" style="display:none;margin-bottom:14px;padding:11px 16px;background:rgba(201,168,76,.10);border-radius:10px;border-left:3px solid var(--gold);font-family:'Playfair Display',serif;font-size:15px;color:var(--navy);"></div>
+  <div class="tab-shell">
+    <div class="tab-nav" id="tabNav"></div>
+    <div id="tabPanes"></div>
+    <div class="tab-footer">
+      <button class="btn btn-ghost btn-sm" id="btnPrev" onclick="moveTab(-1)">← Prev</button>
+      <button class="btn btn-ghost btn-sm" onclick="resetAll()">↺ Restart</button>
+      <button class="btn btn-primary btn-sm" id="btnNext" onclick="moveTab(1)">Next →</button>
+    </div>
+  </div>
+  <div style="margin-top:18px;text-align:center;">
+    <button class="btn btn-gold" style="padding:13px 36px;font-size:15px" onclick="buildSummary()">See My Full Summary →</button>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="screen" id="screenSummary">
+
+  <!-- Print-only header (hidden on screen) -->
+  <div id="printHeader">
+    <h2>The 10 C's Framework — My Project Recipe</h2>
+    <div class="ph-sub">Chinmay Ananda &nbsp;·&nbsp; www.chinmayananda.com</div>
+    <div id="phOutcome" style="display:none"><div class="ph-outcome" id="phOutcomeVal"></div></div>
+    <div class="ph-quote">"I cannot make tea. I only know how to make tea." — Nishkala Chinmay, age 4 yrs</div>
+  </div>
+
+  <!-- Print-only score bar -->
+  <div id="scoreSummaryBar"></div>
+
+  <div class="sum-hero">
+    <div class="icon">🍵</div>
+    <h2>Your Recipe is Ready.</h2>
+    <p id="sumSubtitle"></p>
+  </div>
+  <div class="sum-outcome" id="sumOutcome" style="display:none">
+    <div class="lbl">★ Ideal Outcome</div>
+    <div class="val" id="sumOutcomeVal"></div>
+  </div>
+  <div class="avg-row">
+    <div class="avg-badge">
+      <div class="avg-num" id="avgNum">—</div>
+      <div class="avg-label">Avg Score / 10</div>
+    </div>
+    <div class="score-tiles" id="scoreTiles"></div>
+  </div>
+  <div class="sum-cards" id="sumCards"></div>
+  <div class="action-row">
+    <button class="btn btn-primary" onclick="preparePrint()">🖨 Print / Save PDF</button>
+    <button class="btn btn-wa" id="btnWA">💬 Share on WhatsApp</button>
+    <button class="btn btn-ghost" onclick="show('screenTabs')">← Edit Answers</button>
+    <button class="btn btn-ghost" onclick="resetAll()">↺ Start Fresh</button>
+  </div>
+  <div class="footer-note">
+    <strong>The 10 C's Framework</strong> by Chinmay Ananda &nbsp;·&nbsp;
+    <a href="https://www.chinmayananda.com" target="_blank">www.chinmayananda.com</a>
+  </div>
+
+  <!-- Print-only footer -->
+  <div id="printFooter">
+    Generated using the 10 C's Framework Tool &nbsp;·&nbsp; Chinmay Ananda &nbsp;·&nbsp; www.chinmayananda.com
+  </div>
+</div>
+
+<script>
+const CS = [
+  {num:1, key:"core",        title:"CORE",        sub:"Non-negotiable",
+   def:"What is the <strong>ONE thing</strong> without which this project simply cannot happen? Don't let a nice-to-have do the job of the core ingredient.",
+   ph:"e.g. Committed volunteers, secured funding, a clear beneficiary..."},
+  {num:2, key:"complement",  title:"COMPLEMENT",  sub:"What helps",
+   def:"What <strong>supports the core</strong> and makes it better? A complement enhances — it can never replace. Watch how much time you spend here vs. on the core.",
+   ph:"e.g. Sponsorships, media coverage, a venue upgrade..."},
+  {num:3, key:"catalyst",    title:"CATALYST",    sub:"What accelerates",
+   def:"Who or what can <strong>speed up the process</strong>? The right tool, technology, or person at the right time changes everything. A fool with a tool is still a fool.",
+   ph:"e.g. A well-connected advisor, a digital platform, a key introduction..."},
+  {num:4, key:"context",     title:"CONTEXT",     sub:"Your reality",
+   def:"What <strong>environment are you operating in?</strong> We live in a VUCA world — volatile, uncertain, complex, ambiguous. Acknowledge it and work with it, not against it.",
+   ph:"e.g. Post-election climate, tight budget cycle, monsoon timing..."},
+  {num:5, key:"character",   title:"CHARACTER/S", sub:"Who is involved",
+   def:"Are the <strong>right people</strong> involved with the right attitude? When life squeezes a lemon, only lemon juice comes out. Who you are IS what you bring to the table.",
+   ph:"e.g. A committed core team of 5, a results-oriented project lead..."},
+  {num:6, key:"creativity",  title:"CREATIVITY",  sub:"What adds value",
+   def:"What can be done <strong>differently</strong> to add genuine value? Creativity for its own sake is noise. Creativity with purpose is magic. The 6 most dangerous words: <em>it was always done this way.</em>",
+   ph:"e.g. Partner with a school instead of just donating, gamify fundraising..."},
+  {num:7, key:"countdown",   title:"COUNTDOWN",   sub:"By when",
+   def:"What is the <strong>timeline</strong> — and what happens if it changes? A master chef sets the timer. Overcooked or undercooked — both ruin the dish.",
+   ph:"e.g. Launch 1 Apr, midpoint review 15 Apr, close 30 Apr..."},
+  {num:8, key:"contaminant", title:"CONTAMINANT", sub:"What to avoid",
+   def:"<strong>Anything in excess contaminates.</strong> Overthinking. Over-planning. Over-talking. Too many cooks. This C is the one most people skip — and the one that derails the most projects.",
+   ph:"e.g. Too many decision-makers, scope creep, perfectionism over progress..."},
+  {num:9, key:"calling",     title:"CALLING",     sub:"Your WHY",
+   def:"What <strong>pulls you forward</strong> when no one is watching? This is what makes you jump out of bed on a Monday morning. Without it, the other 8 C's are just a checklist.",
+   ph:"e.g. We've seen this problem firsthand and we can't unsee it..."},
+  {num:10,key:"clarity",     title:"CLARITY",     sub:"Your compass",
+   def:"Do you <strong>know where you are on the map</strong> right now? Clarity is not about being perfect. It is about knowing your current position — and your next honest step.",
+   ph:"e.g. Phase 1 complete, 3 approvals pending, next step is stakeholder meeting..."},
+];
+
+let activeTab = 0;
+const answers = {}, scores = {};
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function startTabs() {
+  const ideal = document.getElementById('idealInput').value.trim();
+  const bar = document.getElementById('outcomeBar');
+  if (ideal) { bar.textContent = '★  ' + ideal; bar.style.display='block'; }
+  else { bar.style.display='none'; }
+  buildTabs();
+  show('screenTabs');
+}
+
+function buildTabs() {
+  const nav = document.getElementById('tabNav');
+  const panes = document.getElementById('tabPanes');
+  nav.innerHTML = ''; panes.innerHTML = '';
+
+  CS.forEach((c,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i===activeTab?' active':'');
+    btn.id = 'tb_'+i;
+    btn.textContent = c.num+'. '+c.title;
+    btn.onclick = ()=>switchTab(i);
+    nav.appendChild(btn);
+
+    const sc = scores[c.key]!==undefined ? scores[c.key] : 5;
+    const pct = (sc/10)*100;
+    const pane = document.createElement('div');
+    pane.className = 'tab-pane'+(i===activeTab?' active':'');
+    pane.id = 'tp_'+i;
+    pane.innerHTML = `
+      <div class="c-header">
+        <div class="c-num-badge">${c.num}</div>
+        <div>
+          <div class="c-title">${c.title}</div>
+          <div class="c-sub">${c.sub}</div>
+        </div>
+      </div>
+      <div class="def-box">${c.def}</div>
+      <div class="ans-label">Your notes for this C</div>
+      <textarea id="a_${c.key}" placeholder="${c.ph}">${esc(answers[c.key]||'')}</textarea>
+      <div class="score-row">
+        <div class="score-lbl">Needs work</div>
+        <div class="slider-wrap">
+          <input type="range" min="1" max="10" value="${sc}" id="s_${c.key}"
+            style="--pct:${pct}%" oninput="onSlider(this,'${c.key}')"/>
+        </div>
+        <div class="score-lbl right">Strong</div>
+        <div class="score-val" id="sv_${c.key}">${sc}</div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);text-align:right;margin-top:3px">Rate how strong this C is for your project (1–10)</div>`;
+    panes.appendChild(pane);
+  });
+  refreshArrows();
+}
+
+function switchTab(i) {
+  saveCurrent();
+  activeTab = i;
+  document.querySelectorAll('.tab-btn').forEach((b,j)=>b.classList.toggle('active',j===i));
+  document.querySelectorAll('.tab-pane').forEach((p,j)=>p.classList.toggle('active',j===i));
+  refreshArrows();
+  // scroll tab into view
+  const btn = document.getElementById('tb_'+i);
+  if (btn) btn.scrollIntoView({inline:'center',behavior:'smooth'});
+}
+
+function moveTab(dir) {
+  const n = activeTab + dir;
+  if (n>=0 && n<CS.length) switchTab(n);
+}
+
+function refreshArrows() {
+  const prev = document.getElementById('btnPrev');
+  const next = document.getElementById('btnNext');
+  if (prev) prev.disabled = activeTab===0;
+  if (next) {
+    const last = activeTab===CS.length-1;
+    next.textContent = last ? 'Done ✓' : 'Next →';
+    next.onclick = last ? buildSummary : ()=>moveTab(1);
+  }
+}
+
+function saveCurrent() {
+  const c = CS[activeTab];
+  const ta = document.getElementById('a_'+c.key);
+  const sl = document.getElementById('s_'+c.key);
+  if (ta) answers[c.key] = ta.value.trim();
+  if (sl) scores[c.key]  = parseInt(sl.value);
+  refreshDots();
+}
+
+function onSlider(el, key) {
+  const v = parseInt(el.value);
+  el.style.setProperty('--pct', (v/10*100)+'%');
+  const sv = document.getElementById('sv_'+key);
+  if (sv) sv.textContent = v;
+  scores[key] = v;
+  refreshDots();
+}
+
+function refreshDots() {
+  CS.forEach((c,i)=>{
+    const btn = document.getElementById('tb_'+i);
+    if (!btn) return;
+    const filled = (answers[c.key]&&answers[c.key].trim()) || scores[c.key]!==undefined;
+    if (filled && !btn.querySelector('.dot')) {
+      const d=document.createElement('span'); d.className='dot'; btn.appendChild(d);
+    }
+  });
+}
+
+function buildSummary() {
+  saveCurrent();
+  const ideal = document.getElementById('idealInput').value.trim();
+  const filled = CS.filter(c=>answers[c.key]&&answers[c.key].trim()).length;
+  const allS = CS.map(c=>scores[c.key]!==undefined?scores[c.key]:5);
+  const avg  = (allS.reduce((a,b)=>a+b,0)/allS.length).toFixed(1);
+
+  document.getElementById('sumSubtitle').textContent =
+    filled<4 ? `${filled} of 10 C's filled — the gaps are your most useful insight.` :
+    filled<8 ? `${filled} of 10 C's filled — the empty ones are worth a team conversation.` :
+               `${filled} of 10 C's filled — a thorough recipe. Now go brew it.`;
+
+  if (ideal) {
+    document.getElementById('sumOutcome').style.display='block';
+    document.getElementById('sumOutcomeVal').textContent = ideal;
+  }
+
+  document.getElementById('avgNum').textContent = avg;
+
+  document.getElementById('scoreTiles').innerHTML = CS.map(c=>{
+    const s=scores[c.key]!==undefined?scores[c.key]:5;
+    return `<div class="s-tile">
+      <div class="tn">${c.title.replace('CHARACTER/S','CHAR/S')}</div>
+      <div class="ts">${s}</div>
+      <div class="tb"><div class="tf" style="width:${s*10}%"></div></div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('sumCards').innerHTML = CS.map(c=>{
+    const s=scores[c.key]!==undefined?scores[c.key]:5;
+    const ans=answers[c.key]&&answers[c.key].trim();
+    return `<div class="s-card">
+      <div class="sh">
+        <div class="sn">${c.num}. ${c.title}</div>
+        <div class="sb">${s}/10</div>
+      </div>
+      ${ans?`<div class="sa">${esc(ans)}</div>`:`<div class="se">Not filled in</div>`}
+    </div>`;
+  }).join('');
+
+  // WhatsApp
+  let wa = `🍵 *The 10 C's Framework — My Project Recipe*\n`;
+  if (ideal) wa += `\n⭐ *Ideal Outcome:* ${ideal}\n`;
+  wa += `\n📊 *Overall Score: ${avg}/10*\n`;
+  CS.forEach(c=>{
+    const s=scores[c.key]!==undefined?scores[c.key]:5;
+    wa += `\n*${c.num}. ${c.title}* (${s}/10)`;
+    if (answers[c.key]&&answers[c.key].trim()) wa += `\n${answers[c.key]}`;
+  });
+  wa += `\n\n_Framework by Chinmay Ananda · www.chinmayananda.com_`;
+  document.getElementById('btnWA').onclick = ()=>window.open('https://wa.me/?text='+encodeURIComponent(wa),'_blank');
+
+  show('screenSummary');
+}
+
+function resetAll() {
+  Object.keys(answers).forEach(k=>delete answers[k]);
+  Object.keys(scores).forEach(k=>delete scores[k]);
+  document.getElementById('idealInput').value='';
+  activeTab=0;
+  show('screenWelcome');
+}
+
+function esc(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function preparePrint() {
+  // Populate print-only score bar
+  const bar = document.getElementById('scoreSummaryBar');
+  bar.innerHTML = CS.map(c => {
+    const s = scores[c.key] !== undefined ? scores[c.key] : 5;
+    return `<div class="pscore-tile">
+      <div class="ptn">${c.title.replace('CHARACTER/S','CHAR/S')}</div>
+      <div class="pts">${s}/10</div>
+    </div>`;
+  }).join('');
+
+  // Populate print outcome
+  const ideal = document.getElementById('idealInput').value.trim();
+  const phOut = document.getElementById('phOutcome');
+  const phVal = document.getElementById('phOutcomeVal');
+  if (ideal && phOut && phVal) {
+    phVal.textContent = '★  ' + ideal;
+    phOut.style.display = 'block';
+  }
+
+  // Add avg to print header
+  const avg = document.getElementById('avgNum').textContent;
+  const hdr = document.getElementById('printHeader');
+  const existing = hdr.querySelector('.ph-avg');
+  if (!existing && avg !== '—') {
+    const avgEl = document.createElement('div');
+    avgEl.className = 'ph-avg';
+    avgEl.style.cssText = 'font-size:12px;color:#555;margin-top:5px;';
+    avgEl.textContent = 'Overall Score: ' + avg + ' / 10';
+    hdr.insertBefore(avgEl, hdr.querySelector('.ph-quote'));
+  }
+
+  window.print();
+}
+</script>
+</body>
+</html>
